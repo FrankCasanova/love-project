@@ -1,8 +1,13 @@
 #root {
-  max-width: 1280px;
+  max-width: 100%;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 .logo {
@@ -52,11 +57,13 @@ body,
   background: linear-gradient(135deg, #ffb6c1 0%, #ffe4e1 100%);
   min-height: 100vh;
   overflow-x: hidden;
+  width: 100%;
 }
 
 .app-root {
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
+  max-width: 100vw;
   overflow: hidden;
   position: relative;
   background: #1a0025;
@@ -71,12 +78,14 @@ body,
 .main-love-page {
   position: relative;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 1;
-  padding: 1.5rem 0.5rem;
+  padding: 1rem;
   box-sizing: border-box;
 }
 
@@ -138,20 +147,42 @@ body,
 }
 
 @keyframes heartBounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: rotate(-45deg) scale(1.2);
   }
+
   20% {
     transform: rotate(-45deg) scale(1.3);
   }
+
   40% {
     transform: rotate(-45deg) scale(1.15);
   }
+
   60% {
     transform: rotate(-45deg) scale(1.25);
   }
+
   80% {
     transform: rotate(-45deg) scale(1.2);
+  }
+}
+
+@keyframes funnyPop {
+  0% {
+    transform: scale(0) rotate(-5deg);
+    opacity: 0;
+  }
+
+  70% {
+    transform: scale(1.1) rotate(3deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
   }
 }
 
@@ -166,6 +197,7 @@ body,
   transform: translate(-50%, -50%);
   animation: pulse 1.5s infinite;
   z-index: 1;
+  will-change: transform;
 }
 
 @keyframes pulse {
@@ -191,9 +223,10 @@ body,
   z-index: 0;
   pointer-events: none;
   background: radial-gradient(circle at 30% 30%, #ff6ec7 0%, #1a0025 80%);
-  animation: crazyBg 10s linear infinite alternate;
+  animation: crazyBg 15s ease-in-out infinite alternate;
   opacity: 0.7;
   filter: blur(10px) brightness(1.2) saturate(1.5);
+  will-change: background-position;
 }
 
 @keyframes crazyBg {
@@ -279,17 +312,121 @@ body,
   z-index: 20;
   will-change: transform, opacity;
   transition: text-shadow 0.4s;
-  animation: funnyPop 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+  animation: funnyPop 0.7s cubic-bezier(.68, -0.55, .27, 1.55);
 }
 
-@media (max-width: 600px) {
+/* Mobile-first approach */
+.funny-message {
+  font-size: 1.2rem;
+  padding: 0.2rem 0.5rem;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.love-title {
+  font-size: 1.8rem;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.love-message {
+  font-size: 1.2rem;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+.heart-btn {
+  width: 120px;
+  height: 120px;
+}
+
+.heart-shape {
+  width: 80px;
+  height: 70px;
+}
+
+.heart-shape:before {
+  width: 70px;
+  height: 60px;
+  left: 0px;
+  top: -35px;
+}
+
+.heart-shape:after {
+  width: 70px;
+  height: 60px;
+  left: 35px;
+  top: 0px;
+}
+
+.pulse {
+  width: 140px;
+  height: 140px;
+}
+
+.love-pic {
+  width: 85vw;
+  max-width: 320px;
+  height: 85vw;
+  max-height: 320px;
+}
+
+/* Tablet and larger screens */
+@media (min-width: 600px) {
   .funny-message {
-    font-size: 1.2rem;
-    padding: 0.2rem 0.5rem;
+    font-size: 1.5rem;
+  }
+
+  .love-title {
+    font-size: 2.5rem;
+  }
+
+  .love-message {
+    font-size: 1.8rem;
+  }
+
+  .heart-btn {
+    width: 150px;
+    height: 150px;
+  }
+
+  .heart-shape {
+    width: 100px;
+    height: 90px;
+  }
+
+  .heart-shape:before {
+    width: 90px;
+    height: 80px;
+    left: 0px;
+    top: -45px;
+  }
+
+  .heart-shape:after {
+    width: 90px;
+    height: 80px;
+    left: 45px;
+    top: 0px;
+  }
+
+  .pulse {
+    width: 170px;
+    height: 170px;
+  }
+
+  .love-pic {
+    max-width: 400px;
+    max-height: 400px;
   }
 }
 
-@media (min-width: 600px) {
+/* Desktop screens */
+@media (min-width: 1024px) {
+  .funny-message {
+    font-size: 2.1rem;
+  }
+
   .love-title {
     font-size: 3rem;
   }
@@ -303,19 +440,21 @@ body,
     height: 180px;
   }
 
-  .heart-shape,
-  .heart-shape:after,
-  .heart-shape:before {
+  .heart-shape {
     width: 130px;
     height: 120px;
   }
 
   .heart-shape:before {
+    width: 120px;
+    height: 110px;
     left: 0px;
     top: -65px;
   }
 
   .heart-shape:after {
+    width: 120px;
+    height: 110px;
     left: 65px;
     top: 0px;
   }

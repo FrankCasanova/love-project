@@ -158,7 +158,7 @@ function MainLovePage() {
     >
       <div className="crazy-bg"></div>
       <motion.img
-        src="/pic.jpg"
+        src="pic.jpg"
         alt="Love Pic"
         className="love-pic"
         style={{ filter: `blur(${blur}px)`, cursor: 'pointer' }}
@@ -254,7 +254,7 @@ function MainLovePage() {
           }}
         />
       </AnimatePresence>
-      <audio ref={audioRef} src="/soundtrack.mp3" loop />
+      <audio ref={audioRef} src="soundtrack.mp3" loop />
       <motion.div
         className="love-message"
         initial={{ opacity: 0, y: 40 }}

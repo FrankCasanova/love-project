@@ -45,7 +45,30 @@ function HeartButton({ onClick }) {
 function MainLovePage() {
   const [blur, setBlur] = useState(20)
   const [volume, setVolume] = useState(0)
+  const [funnyMessages, setFunnyMessages] = useState([])
   const audioRef = useRef(null)
+
+  // List of cute/funny messages
+  const messageList = [
+    "mimiiiii",
+    "pero tú me quiereeeeeee??? :)",
+    "te echo mucho de meno....tú dónde ta",
+    "ven ya :(",
+    "aaaaaaaaaaaaaaaaaaaaaaaa",
+    "ofú -.- *se pone cachondo*",
+    "nenanenanenanena mirame a miiiii"
+  ]
+
+  // Handle photo click to show random message
+  const handlePhotoClick = () => {
+    const msg = messageList[Math.floor(Math.random() * messageList.length)]
+    const id = Date.now() + Math.random()
+    setFunnyMessages((prev) => [...prev, { id, msg }])
+    // Remove after 5.2s
+    setTimeout(() => {
+      setFunnyMessages((prev) => prev.filter((m) => m.id !== id))
+    }, 5200)
+  }
 
   useEffect(() => {
     let blurStart = 20
@@ -100,12 +123,39 @@ function MainLovePage() {
         src="/pic.jpg"
         alt="Love Pic"
         className="love-pic"
-        style={{ filter: `blur(${blur}px)` }}
+        style={{ filter: `blur(${blur}px)`, cursor: 'pointer' }}
         initial={{ scale: 1.3, opacity: 0.7, rotate: -8 }}
         animate={{ scale: 1, opacity: 1, rotate: 0, transition: { duration: 2.6, type: 'spring', stiffness: 70, damping: 18 } }}
         whileHover={{ scale: 1.04, boxShadow: '0 0 160px 40px #ffb6c1' }}
         whileTap={{ scale: 0.98 }}
+        onClick={handlePhotoClick}
       />
+      {/* Animated funny messages */}
+      <AnimatePresence>
+        {funnyMessages.map(({ id, msg }) => (
+          <motion.div
+            key={id}
+            className="funny-message"
+            initial={{ y: 0, opacity: 0, top: '30%' }}
+            animate={{
+              y: -180, // upward movement in px
+              opacity: [0, 1, 1, 0],
+              top: ["30%", "18%", "10%", "5%"],
+              transition: {
+                duration: 5.2,
+                ease: 'easeInOut',
+                opacity: { times: [0, 0.12, 0.7, 1], duration: 5.2 },
+                top: { duration: 5.2 },
+                y: { duration: 5.2 },
+              }
+            }}
+            exit={{ opacity: 0 }}
+            style={{ position: 'absolute', left: '50%', top: '30%', transform: 'translate(-50%, 0)', zIndex: 10, pointerEvents: 'none' }}
+          >
+            {msg}
+          </motion.div>
+        ))}
+      </AnimatePresence>
       <audio ref={audioRef} src="/soundtrack.mp3" loop />
       <motion.div
         className="love-message"

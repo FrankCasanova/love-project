@@ -92,7 +92,7 @@ function MainLovePage() {
     <motion.div
       className="main-love-page"
       initial={{ opacity: 0, scale: 1.1 }}
-      animate={{ opacity: 1, scale: 1, transition: { duration: 2 } }}
+      animate={{ opacity: 1, scale: 1, transition: { duration: 2, type: 'spring', stiffness: 60, damping: 20 } }}
       exit={{ opacity: 0, scale: 0.95, transition: { duration: 1 } }}
     >
       <div className="crazy-bg"></div>
@@ -101,14 +101,16 @@ function MainLovePage() {
         alt="Love Pic"
         className="love-pic"
         style={{ filter: `blur(${blur}px)` }}
-        initial={{ scale: 1.2, opacity: 0.7 }}
-        animate={{ scale: 1, opacity: 1, transition: { duration: 3 } }}
+        initial={{ scale: 1.3, opacity: 0.7, rotate: -8 }}
+        animate={{ scale: 1, opacity: 1, rotate: 0, transition: { duration: 2.6, type: 'spring', stiffness: 70, damping: 18 } }}
+        whileHover={{ scale: 1.04, boxShadow: '0 0 160px 40px #ffb6c1' }}
+        whileTap={{ scale: 0.98 }}
       />
       <audio ref={audioRef} src="/soundtrack.mp3" loop />
       <motion.div
         className="love-message"
         initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0, transition: { delay: 2, duration: 2 } }}
+        animate={{ opacity: 1, y: 0, transition: { delay: 2, duration: 2, type: 'spring', stiffness: 60, damping: 14 } }}
       >
         Love is in the air! 💖
       </motion.div>
@@ -139,8 +141,15 @@ function App() {
             initial={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95, transition: { duration: 1.5 } }}
             animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', stiffness: 80, damping: 16 }}
           >
-            <h1 className="love-title">Welcome to the Love Project</h1>
+            <motion.h1
+              className="love-title"
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 1 } }}
+            >
+              Welcome to the Love Project
+            </motion.h1>
             <HeartButton onClick={handleHeartClick} />
             <div className="crazy-bg"></div>
           </motion.div>

@@ -46,6 +46,7 @@ function MainLovePage() {
   const [blur, setBlur] = useState(20)
   const [volume, setVolume] = useState(0)
   const [funnyMessages, setFunnyMessages] = useState([])
+  const [floatingGifs, setFloatingGifs] = useState([])
   const audioRef = useRef(null)
 
   // List of cute/funny messages
@@ -59,6 +60,16 @@ function MainLovePage() {
     "nenanenanenanena mirame a miiiii"
   ]
 
+  const gifList = [
+    "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm1kMHJrc2JneGF0MzhlNnI3b29tazFhMWVxazR0M2Izbm1neXVpNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KztT2c4u8mYYUiMKdJ/giphy.gif",
+    "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExeXhoenVhbzlkaDgxaTJpZnN3cTBlOHc5YXgyODZjbGZ0dHJzZmFvbSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KmxmoHUGPDjfQXqGgv/giphy.gif",
+    "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExd3N6azBidW93OHd1M3B2a2N4eXFkNWNsZjRkMjZ4amg3dXVwYWd3biZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Gf54zTxt2QKru/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmU0NDEzc2l0a3J5ZHdyOXdnankxYjJseTUzbWJienN2MzNxYnY1dCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/kvrvnB158J4fm/giphy.gif",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExa2drOGtsbzl5aGd2bzY3M2MzemNjNTZ1Y2RlYWloeHd4NmFoZ2NuOCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oriO6qJiXajN0TyDu/giphy.gif",
+    "https://media.giphy.com/media/WP1Z0FfnuMuXqPvDlj/giphy.gif?cid=ecf05e4744wliztpggofsd0boecw5vjafpv7fy8jos4ttlbx&ep=v1_gifs_search&rid=giphy.gif&ct=g",
+    "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbW5kc2V3bWhmNjNmZzB3aTRndWhuMmJxa3d0ZGN1Y2x5aWh2Y3B3ZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/qFmdpUKAFZ6rMobzzu/giphy.gif"
+  ]
+
   // Handle photo click to show random message
   const handlePhotoClick = () => {
     const msg = messageList[Math.floor(Math.random() * messageList.length)]
@@ -69,6 +80,33 @@ function MainLovePage() {
       setFunnyMessages((prev) => prev.filter((m) => m.id !== id))
     }, 5200)
   }
+
+  // Spawn a floating gif every 3-5 seconds
+  useEffect(() => {
+    let running = true
+    function spawnGif() {
+      if (!running) return
+      const url = gifList[Math.floor(Math.random() * gifList.length)]
+      const left = Math.random() * 70 + 10 // random between 10% and 80%
+      const id = Date.now() + Math.random()
+      setFloatingGifs(gifs => [...gifs, { id, url, left }])
+      const nextDelay = Math.random() * 2000 + 3000 // 3-5 seconds
+      setTimeout(spawnGif, nextDelay)
+    }
+    spawnGif()
+    return () => { running = false }
+  }, [])
+
+  // Remove gifs after their animation duration
+  useEffect(() => {
+    if (!floatingGifs.length) return
+    const timers = floatingGifs.map(gif =>
+      setTimeout(() => {
+        setFloatingGifs(gifs => gifs.filter(g => g.id !== gif.id))
+      }, 15500)
+    )
+    return () => timers.forEach(clearTimeout)
+  }, [floatingGifs])
 
   useEffect(() => {
     let blurStart = 20
@@ -156,13 +194,80 @@ function MainLovePage() {
           </motion.div>
         ))}
       </AnimatePresence>
+      {/* Floating GIFs, random position, float up and fade out */}
+      <AnimatePresence>
+        {floatingGifs.map(gif => (
+          <motion.img
+            key={gif.id}
+            src={gif.url}
+            alt="Floating gif"
+            className="cat-love-gif"
+            initial={{ y: 80, opacity: 0 }}
+            animate={{
+              y: -940,
+              opacity: [0, 1, 1, 0],
+              transition: {
+                y: { duration: 15.5, ease: 'easeInOut' },
+                opacity: { times: [0, 0.1, 0.7, 1], duration: 15.5 }
+              }
+            }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'absolute',
+              left: `${gif.left}%`,
+              bottom: '32px',
+              width: '90px',
+              height: 'auto',
+              zIndex: 15,
+              transform: 'translateX(-50%)',
+              pointerEvents: 'none',
+            }}
+          />
+        ))}
+      </AnimatePresence>
+      {/* Cute cat love GIF floating up and fading out */}
+      <AnimatePresence>
+        <motion.img
+          key="cat-love-gif"
+          src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm1kMHJrc2JneGF0MzhlNnI3b29tazFhMWVxazR0M2Izbm1neXVpNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/KztT2c4u8mYYUiMKdJ/giphy.gif"
+          alt="Cute cat love gif"
+          className="cat-love-gif"
+          initial={{ y: 80, opacity: 0 }}
+          animate={{
+            y: -940,
+            opacity: [0, 1, 1, 0],
+            transition: {
+              y: { duration: 15.5, ease: 'easeInOut' },
+              opacity: { times: [0, 0.1, 0.7, 1], duration: 15.5 }
+            }
+          }}
+          exit={{ opacity: 0 }}
+          style={{
+            position: 'absolute',
+            left: '50%',
+            bottom: '32px',
+            width: '90px',
+            height: 'auto',
+            zIndex: 15,
+            transform: 'translateX(-50%)',
+            pointerEvents: 'none',
+          }}
+        />
+      </AnimatePresence>
       <audio ref={audioRef} src="/soundtrack.mp3" loop />
       <motion.div
         className="love-message"
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0, transition: { delay: 2, duration: 2, type: 'spring', stiffness: 60, damping: 14 } }}
       >
-        Love is in the air! 💖
+        Te quiero mucho de millone
+      </motion.div>
+      <motion.div
+        className="love-message"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0, transition: { delay: 2, duration: 2, type: 'spring', stiffness: 60, damping: 14 } }}
+      >
+        de millone de infinito 💖
       </motion.div>
     </motion.div>
   )
@@ -198,7 +303,14 @@ function App() {
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0, transition: { duration: 1 } }}
             >
-              Welcome to the Love Project
+              He hecho esto para ti
+            </motion.h1>
+            <motion.h1
+              className="love-title"
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 1 } }}
+            >
+              (pulsa el corazoncito...)
             </motion.h1>
             <HeartButton onClick={handleHeartClick} />
             <div className="crazy-bg"></div>

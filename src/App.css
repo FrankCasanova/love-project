@@ -105,15 +105,14 @@ body,
 }
 
 .heart-shape {
-  display: block;
-  width: 90px;
-  height: 80px;
+  width: 100px;
+  height: 90px;
   background: #ff6ec7;
   position: absolute;
-  top: 5px;
-  left: 0px;
-  border-radius: 50px 50px 0 0;
-  transform: rotate(-45deg) scale(1.2);
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  clip-path: path('M50 90 L90 40 A25 25 0 1 0 50 15 A25 25 0 1 0 10 40 Z');
   box-shadow: 0 0 40px #ff6ec7, 0 0 80px #fff;
   animation: heartBounce 1.2s infinite;
 }
@@ -266,47 +265,30 @@ body,
 .funny-message {
   font-size: 2.1rem;
   color: #fff;
-  background: rgba(255, 110, 199, 0.96);
-  border-radius: 2.5rem;
-  padding: 1.2rem 2.2rem;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0.5rem 1rem;
   margin-top: 1.2rem;
-  box-shadow: 0 6px 40px 0 #ffb6c1, 0 0 4px #fff;
-  border: 3px solid #fff;
-  text-shadow: 0 2px 10px #ff6ec7, 0 0 12px #fff;
+  box-shadow: none;
+  text-shadow: 0 2px 12px #ff6ec7, 0 0 16px #fff, 0 0 2px #ffb6c1;
   pointer-events: none;
   user-select: none;
   font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
   letter-spacing: 1.5px;
   z-index: 20;
   will-change: transform, opacity;
-  transition: box-shadow 0.4s, background 0.4s;
+  transition: text-shadow 0.4s;
   animation: funnyPop 0.7s cubic-bezier(.68,-0.55,.27,1.55);
-}
-
-@keyframes funnyPop {
-  0% {
-    transform: scale(0.7) rotate(-10deg);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.15) rotate(6deg);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
-  }
 }
 
 @media (max-width: 600px) {
   .funny-message {
     font-size: 1.2rem;
-    padding: 0.7rem 1.1rem;
-    border-width: 2px;
+    padding: 0.2rem 0.5rem;
   }
 }
 
-/* Responsive styles */
 @media (min-width: 600px) {
   .love-title {
     font-size: 3rem;
